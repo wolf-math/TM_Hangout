@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1 class="Text Center">Register</h1>
+<br/>
+
+<div class='col-md-6 offset-md-3'>
+
+  <form method="POST" action="{% url 'user_auth:register' %}">
+    {% csrf_token %}
+    {% if form.errors %}
+      <div class="alert alert-warning d-flex align-items-center" role="alert">
+        <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+        <div>
+          You couldn't be registered 
+        </div>
+         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endif %}
+
+    {{ form.as_p }}
+
+    <input type="submit" value="Register" class="btn btn-secondary">
+  </form>
+</div>
+
+{% endblock %}
