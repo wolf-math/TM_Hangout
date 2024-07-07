@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 import calendar
 from calendar import HTMLCalendar
 from datetime import datetime
+from .models import Event
 
 @login_required
 def planner(request):
@@ -41,3 +42,8 @@ def month(request, year = None, month = None):
         "month": month,
         "cal": cal
     })
+
+
+def all_events(request):
+    event_list = Event.objects.all()
+    return render(request, 'events.html', {'event_list': event_list})
