@@ -11,8 +11,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
-# Application definition
+LOGIN_URL = '/login/'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -21,6 +20,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'user_auth',
+    'home',
+    'planner'
 ]
 
 MIDDLEWARE = [

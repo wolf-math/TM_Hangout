@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>hey there {{user}}</h1>
+<h2>{{month}} {{year}}</h2>
+
+<center>
+{{ cal|safe }}
+</center>
+
+{% endblock %}
