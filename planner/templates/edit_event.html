@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+
+  <h1>Update Event</h1>
+
+  <br/>
+
+  {% comment %} {{event.name}} {% endcomment %}
+  <form action="" method=POST>
+    {% csrf_token %}
+    {{form.as_p}}
+    <br/>
+    <input type="submit" value="Edit" class="btn btn-secondary">
+
+{% endblock %}

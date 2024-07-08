@@ -1,5 +1,6 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 import calendar
 from calendar import HTMLCalendar
 from datetime import datetime
@@ -52,26 +53,36 @@ def all_events(request):
 
 @login_required
 def add_event(request):
-    submitted = False
     if request.method == "POST":
         form = EventForm(request.POST)
         if form.is_valid():
             event = form.save(commit=False)
             event.manager = request.user
             event.save()
-            return HttpResponseRedirect('/add_event?submitted=True')
-    else:
-        form = EventForm
-        if 'submitted' in request.GET:
-            submitted = True
-
-    return render(request, 'add_event.html', {'form': form, 'submitted': submitted})
+            
+            return redirect('planner:event', event_id=event.id) 
+    form = EventForm        
+    return render(request, 'add_event.html', {'form': form})
 
 @login_required
 def event(request, event_id):
     event = get_object_or_404(Event, id=event_id)
 
-    # if event.user != request.user:
-    #     return HttpResponseForbidden("You are not authorized to view this event.")
-
     return render(request, 'event.html', {'event': event, 'user': request.user.id })
+
+
+@login_required
+def edit_event(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+    form = EventForm(request.POST or None, instance=event)
+    if form.is_valid():
+        form.save()
+        return redirect('planner:event', event_id=event.id) 
+    
+    return render(request, 'edit_event.html', {'event': event, 'user': request.user.id, 'form': form })
+
+@login_required
+def delete_event(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+    event.delete()
+    return redirect('planner:all_events') 

@@ -11,22 +11,25 @@
     <p class="card-text"><strong>Description:</strong> {{event.description}}</p>
     <p class="card-text"><strong>Arranged by:</strong> {{event.manager}}</p>
     <p class="card-text">
+    {% if event.multi_person == True %}
+      <p class="card-text"><strong>Attendees: </strong></p>
+    {% endif %}
+      
       {% if attendees|length > 0 %}
-      <li>Attendees: 
-        {% for attendee in event.attendees.all %}
-          <ul>
-            <li>{{attendee}}</li>
-          </ul>
-        {% endfor %}
+          {% for attendee in event.attendees.all %}
+            <ul>
+              <li>{{attendee}}</li>
+            </ul>
+          {% endfor %}
+        </li>
       {% endif %}
-  </li>
     </p>
     {% if event.multi_person == True and user != event.manager.id and user not in event.attendees.all %}
       <a href="#" class="btn btn-primary">Sign Up</a>
     {% endif %}
     {% if user == event.manager.id %}
-      <a href="#" class="btn btn-danger">Delete</a>
-      <a href="#" class="btn btn-secondary">Edit</a>
+    <a href="{% url 'planner:edit_event' event.id %}" class="btn btn-secondary">Edit</a>
+      <a href="{% url 'planner:delete_event' event.id %}" class="btn btn-danger">Delete</a>
     {% endif %}
 
 
