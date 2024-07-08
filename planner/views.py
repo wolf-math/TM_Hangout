@@ -4,6 +4,8 @@ import calendar
 from calendar import HTMLCalendar
 from datetime import datetime
 from .models import Event
+from .forms import EventForm
+from django.http import HttpResponseRedirect
 
 @login_required
 def planner(request):
@@ -43,7 +45,24 @@ def month(request, year = None, month = None):
         "cal": cal
     })
 
-
+@login_required
 def all_events(request):
-    event_list = Event.objects.all()
+    event_list = Event.objects.all().order_by('-event_date')
     return render(request, 'events.html', {'event_list': event_list})
+
+@login_required
+def add_event(request):
+    submitted = False
+    if request.method == "POST":
+        form = EventForm(request.POST)
+        if form.is_valid():
+            event = form.save(commit=False)
+            event.manager = request.user
+            event.save()
+            return HttpResponseRedirect('/add_event?submitted=True')
+    else:
+        form = EventForm
+        if 'submitted' in request.GET:
+            submitted = True
+
+    return render(request, 'add_event.html', {'form': form, 'submitted': submitted})
