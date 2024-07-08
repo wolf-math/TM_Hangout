@@ -6,7 +6,6 @@ from calendar import HTMLCalendar
 from datetime import datetime
 from .models import Event
 from .forms import EventForm
-# from django.http import HttpResponseRedirect, HttpResponseForbidden
 from .utils import EventCalendar
 from datetime import datetime, timedelta
 
