@@ -1,49 +1,66 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
+# from django.contrib import messages
 import calendar
 from calendar import HTMLCalendar
 from datetime import datetime
 from .models import Event
 from .forms import EventForm
-from django.http import HttpResponseRedirect, HttpResponseForbidden
+# from django.http import HttpResponseRedirect, HttpResponseForbidden
+from .utils import EventCalendar
+from datetime import datetime, timedelta
+
 
 @login_required
 def planner(request):
     now = datetime.now()
     year = now.year
     month_number = now.month
-    
-    cal = HTMLCalendar(calendar.SUNDAY).formatmonth(year, month_number)
+
+    # Get events for the current month
+    events = Event.objects.filter(event_date__year=year, event_date__month=month_number)
+
+    # Create calendar
+    cal = EventCalendar(events).formatmonth(year, month_number)
 
     return render(request, 'planner.html', {
         "name": request.user,
         "year": year,
-        "month": month,
+        "month": now.strftime('%B'),
         "cal": cal
     })
 
 @login_required
-def month(request, year = None, month = None):
-    print("YEAR", year)
-    print("MONTH", month)
-    if year is None:
-        year = datetime.now().year
-    if month is None:
-        month = datetime.now().strftime('%B')
+def month(request, year=None, month=None):
+    if year is None or month is None:
+        now = datetime.now()
+        year = now.year
+        month = now.month
+    else:
+        month_number = list(calendar.month_name).index(month.title())
+        year = int(year)
+        month = month_number
 
-    # Convert month from name to number
-    month_number = list(calendar.month_name).index(month.title()) 
-    month_number = int(month_number)
+    # Calculate previous and next month
+    first_day = datetime(year, month, 1)
+    last_month = (first_day - timedelta(days=1)).replace(day=1)
+    next_month = (first_day + timedelta(days=32)).replace(day=1)
+    
+    # Get events for the specified month
+    events = Event.objects.filter(event_date__year=year, event_date__month=month)
 
     # Create calendar
-    cal = HTMLCalendar(calendar.SUNDAY).formatmonth(year, month_number)
+    cal = EventCalendar(events).formatmonth(year, month)
 
     return render(request, 'planner.html', {
         "name": request.user,
         "year": year,
-        "month": month,
-        "cal": cal
+        "month": calendar.month_name[month],
+        "cal": cal,
+        "prev_year": last_month.year,
+        "prev_month": last_month.strftime('%B'),
+        "next_year": next_month.year,
+        "next_month": next_month.strftime('%B')
     })
 
 @login_required

@@ -1,11 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h1>hey there {{user}}</h1>
-<h2>{{month}} {{year}}</h2>
+{% comment %} <h1>hey there {{user}}</h1> {% endcomment %}
 
-<center>
-{{ cal|safe }}
-</center>
+<h1>{{ month }} {{ year }}</h1>
+    <div>
+        <a href="{% url 'planner:planner' prev_year prev_month %}">&laquo; Previous</a>
+        <a href="{% url 'planner:planner' next_year next_month %}">Next &raquo;</a>
+    </div>
+    <div>
+        {{ cal|safe }}
+    </div>
 
 {% endblock %}
