@@ -8,5 +8,6 @@ urlpatterns = [
     # path converters
     path('planner/<int:year>/<str:month>/', views.month, name="planner"),
     path('events/', views.all_events, name="all_events"),
-    path('add_event', views.add_event, name="add_event")
+    path('add_event', views.add_event, name="add_event"),
+    path('events/<int:event_id>/', views.event, name='event'),
 ]

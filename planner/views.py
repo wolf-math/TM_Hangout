@@ -1,11 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 import calendar
 from calendar import HTMLCalendar
 from datetime import datetime
 from .models import Event
 from .forms import EventForm
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseForbidden
 
 @login_required
 def planner(request):
@@ -66,3 +66,12 @@ def add_event(request):
             submitted = True
 
     return render(request, 'add_event.html', {'form': form, 'submitted': submitted})
+
+@login_required
+def event(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+
+    # if event.user != request.user:
+    #     return HttpResponseForbidden("You are not authorized to view this event.")
+
+    return render(request, 'event.html', {'event': event, 'user': request.user.id })
