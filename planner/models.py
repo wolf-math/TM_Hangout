@@ -9,7 +9,7 @@ class Event(models.Model):
     description = models.TextField(blank=True)
     location = models.CharField(max_length=20, default='unknown')
     multi_person = models.BooleanField(default=False)
-    max_attendees = models.PositiveIntegerField(default=100)  # Maximum number of attendees
+    max_attendees = models.PositiveIntegerField(default=1)  # Maximum number of attendees
     attendees = models.ManyToManyField(User, through='Attendance', related_name='attended_events', blank=True)
 
     def __str__(self):
