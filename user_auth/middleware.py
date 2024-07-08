@@ -12,11 +12,11 @@ class CheckApprovalMiddleware(MiddlewareMixin):
                         reverse('user_auth:await_approval'),
                         reverse('user_auth:logout'),
                         reverse('user_auth:login'),
-                        reverse('home:home')
+                        reverse('home:home'),
                     ]
                     if not request.user.profile.is_approved and request.path not in allowed_paths:
                         return redirect('user_auth:await_approval')
                 except Profile.DoesNotExist:
-                    Profile.objects.create(user=request.user)  # Create profile if it doesn't exist
+                    Profile.objects.create(user=request.user) 
                     return redirect('user_auth:await_approval')
         return None

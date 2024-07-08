@@ -29,6 +29,11 @@
               <li class="nav-item">
                 <a class="dropdown-item" href="{% url 'user_auth:logout' %}">Logout</a>
               </li>
+              {% if request.user.is_superuser %}
+                <li class="nav-item">
+                  <a class="dropdown-item" href="{% url 'user_auth:logout' %}">Aprove</a>
+                </li>
+              {% endif %}
             </ul>
           </li>
         {% else %}
