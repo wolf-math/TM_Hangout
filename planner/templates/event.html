@@ -14,23 +14,24 @@
     {% if event.multi_person == True %}
       <p class="card-text"><strong>Attendees: </strong></p>
     {% endif %}
-      
-      {% if attendees|length > 0 %}
-          {% for attendee in event.attendees.all %}
-            <ul>
-              <li>{{attendee}}</li>
-            </ul>
-          {% endfor %}
-        </li>
-      {% endif %}
-    </p>
-    {% if event.multi_person == True and user != event.manager.id and user not in event.attendees.all %}
-      <a href="#" class="btn btn-primary">Sign Up</a>
+    {% if attendees|length > 0 %}
+        {% for attendee in attendees.all %}
+          <ul>
+            <li>{{attendee.username}}</li>
+          </ul>
+        {% endfor %}
+      </li>
     {% endif %}
-    {% if user == event.manager.id %}
-    <a href="{% url 'planner:edit_event' event.id %}" class="btn btn-secondary">Edit</a>
+    </p>
+    {% if event.multi_person == True and user != event.manager and user not in event.attendees.all %}
+      <a href="{% url 'planner:join_event' event.id %}" class="btn btn-primary">Join</a>
+    {% endif %}
+    {% if user in event.attendees.all %}
+      <a href="{% url 'planner:leave_event' event.id %}" class="btn btn-primary">Leave</a>
+    {% endif %}
+    {% if user == event.manager %}
+      <a href="{% url 'planner:edit_event' event.id %}" class="btn btn-secondary">Edit</a>
       <a href="{% url 'planner:delete_event' event.id %}" class="btn btn-danger">Delete</a>
     {% endif %}
-
 
 {% endblock %}

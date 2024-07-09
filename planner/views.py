@@ -4,7 +4,7 @@ from django.contrib import messages
 import calendar
 from calendar import HTMLCalendar
 from datetime import datetime
-from .models import Event
+from .models import Event, Attendance
 from .forms import EventForm
 from .utils import EventCalendar
 from datetime import datetime, timedelta
@@ -96,9 +96,14 @@ def add_event(request):
 
 @login_required
 def event(request, event_id):
+    user = request.user
     event = get_object_or_404(Event, id=event_id)
+    is_attending = Attendance.objects.filter(event=event, user=request.user).exists()
+    print("ITITIITITIITITITITITIIT",is_attending)
 
-    return render(request, 'event.html', {'event': event, 'user': request.user.id })
+    attendees = event.attendees.all()
+    print("ATATATATATATATATATATATAT",attendees)
+    return render(request, 'event.html', {'event': event, 'user': user, 'attendees': attendees })
 
 
 @login_required
@@ -121,3 +126,44 @@ def delete_event(request, event_id):
         messages.success(request, ("You can't do that"))
     
     return redirect('planner:all_events') 
+
+@login_required
+def join_event(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+
+    if Attendance.objects.filter(event=event, user=request.user).exists():
+        return render(request, 'event_detail.html', {
+            'event': event,
+            'error_message': 'You are already attending this event.'
+        })
+
+    if not event.can_add_attendee():
+        return render(request, 'event_detail.html', {
+            'event': event,
+            'error_message': 'This event has reached its maximum number of attendees.'
+        })
+
+    attendance = Attendance(event=event, user=request.user)
+    try:
+        attendance.save()
+        return redirect('planner:event', event_id=event.id)  # Correct URL pattern name and namespace
+    except ValueError as e:
+        return render(request, 'event_detail.html', {
+            'event': event,
+            'error_message': str(e)
+        })
+
+@login_required
+def leave_event(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+
+    attendance = Attendance.objects.filter(event=event, user=request.user).first()
+
+    if attendance:
+        attendance.delete()
+        return redirect('planner:event', event_id=event.id)  # Correct URL pattern name and namespace
+    else:
+        return render(request, 'event_detail.html', {
+            'event': event,
+            'error_message': 'You are not attending this event.'
+        })
