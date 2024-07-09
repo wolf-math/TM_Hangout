@@ -1,5 +1,5 @@
 """
-ASGI config for david project.
+ASGI config for tm_hangout project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'david.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tm_hangout.settings')
 
 application = get_asgi_application()

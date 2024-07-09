@@ -37,7 +37,7 @@ MIDDLEWARE = [
     'user_auth.middleware.CheckApprovalMiddleware',
 ]
 
-ROOT_URLCONF = 'david.urls'
+ROOT_URLCONF = 'tm_hangout.urls'
 
 TEMPLATES = [
     {
@@ -55,7 +55,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'david.wsgi.application'
+WSGI_APPLICATION = 'tm_hangout.wsgi.application'
 
 
 # Database
