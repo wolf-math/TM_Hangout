@@ -98,11 +98,7 @@ def add_event(request):
 def event(request, event_id):
     user = request.user
     event = get_object_or_404(Event, id=event_id)
-    is_attending = Attendance.objects.filter(event=event, user=request.user).exists()
-    print("ITITIITITIITITITITITIIT",is_attending)
-
     attendees = event.attendees.all()
-    print("ATATATATATATATATATATATAT",attendees)
     return render(request, 'event.html', {'event': event, 'user': user, 'attendees': attendees })
 
 
