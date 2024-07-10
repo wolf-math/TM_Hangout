@@ -1,5 +1,7 @@
 from pathlib import Path
 import os
+import dj_database_url
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -7,9 +9,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('DJANGO')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'tm-hangout.fly.dev']
+CSRF_TRUSTED_ORIGINS = ['https://tm-hangout.fly.dev', 'http://localhost', 'http://127.0.0.1',]
 
 LOGIN_URL = '/login/'
 
@@ -19,15 +22,16 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     'user_auth',
     'home',
     'planner',
-
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -61,14 +65,15 @@ WSGI_APPLICATION = 'tm_hangout.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv('PG_DB'),
-        "USER": os.getenv('PG_USER'),
-        "PASSWORD": os.getenv('PG_PASS'),
-        "HOST": "db", 
-        "PORT": 5432,
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": os.getenv('SB_DB'),
+        "USER": os.getenv('SB_USER'),
+        "PASSWORD": os.getenv('SB_PASS'),
+        "HOST": os.getenv('SB_HOST'), 
+        "PORT": os.getenv('SB_PORT'),
     }
 }
 
@@ -107,7 +112,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
+STATICFILESTORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'job/static')]
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

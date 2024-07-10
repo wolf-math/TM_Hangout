@@ -1,4 +1,6 @@
-# .dockerignore
-.venv
-.git
-.gitignore
+fly.toml
+.git/
+*.sqlite3
+venv
+tmp
+.env
