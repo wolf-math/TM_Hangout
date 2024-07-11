@@ -6,6 +6,8 @@ from django.dispatch import receiver
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     is_approved = models.BooleanField(default=False)
+    birthday = models.DateTimeField()
+    # created_at = models.DateTimeField(auto_now_add=True, )
 
     def __str__(self):
         return self.user.username

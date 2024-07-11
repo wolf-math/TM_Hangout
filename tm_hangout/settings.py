@@ -1,6 +1,6 @@
 from pathlib import Path
 import os
-import dj_database_url
+# import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -9,7 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('DJANGO')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'False') == 'True'
+DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'tm-hangout.fly.dev']
 CSRF_TRUSTED_ORIGINS = ['https://tm-hangout.fly.dev', 'http://localhost', 'http://127.0.0.1',]
@@ -39,6 +39,11 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'user_auth.middleware.CheckApprovalMiddleware',
+]
+
+AUTHENTICATION_BACKENDS = [
+    'user_auth.backends.CaseInsensitiveModelBackend',
+    'django.contrib.auth.backends.ModelBackend'
 ]
 
 ROOT_URLCONF = 'tm_hangout.urls'

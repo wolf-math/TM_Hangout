@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import datetime
 
 class Event(models.Model):
     name = models.CharField(max_length=200)
@@ -11,6 +12,7 @@ class Event(models.Model):
     multi_person = models.BooleanField(default=False)
     max_attendees = models.PositiveIntegerField(default=1, blank=True, null=True)  # Maximum number of attendees
     attendees = models.ManyToManyField(User, through='Attendance', related_name='attended_events')
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
