@@ -68,5 +68,5 @@ class SignUpForm(UserCreationForm):
         print("USER", user)
         print("BIRTHDAY", birthday)
         user.save()
-        Profile.objects.create(user=user, birthday=birthday)
+        # Profile.objects.create(user=user, birthday=birthday)
         return user
