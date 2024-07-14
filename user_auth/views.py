@@ -34,7 +34,7 @@ def login_user(request):
             login(request, user)
             return redirect('home:home')
         else:
-            return redirect('login')
+            return render(request, 'login.html', {'message': 'incorrect username or password'})
     else:
         return render(request, 'login.html', {})
 
@@ -44,21 +44,22 @@ def logout_user(request):
     return redirect('home:home')
 
 
+
 def register_user(request):
     if request.method == "POST":
         form = SignUpForm(request.POST)
         if form.is_valid():
-            form.save()
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password1']
+            user = form.save()
+            username = user.username
+            password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=password)
             login(request, user)
             return redirect('home:home')
-        
+        else:
+            print("Form is not valid:", form.errors)  # Debug statement
     else:
-        form = SignUpForm
-
-    return render(request, 'register.html', {"form": form})
+        form = SignUpForm()
+    return render(request, 'register.html', {'form': form})
 
 
 def login_register(request):

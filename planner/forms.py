@@ -34,20 +34,20 @@ class EventForm(forms.ModelForm):
         }),
         label=''
     )
-    multi_person = forms.BooleanField(
-        widget=forms.CheckboxInput(attrs={
-            'class': 'form-check-input',
-            'id': 'multi_perosn'
-        }),
-        required=False,
-        label="Are others invited?",
-    )
+    # multi_person = forms.BooleanField(
+    #     widget=forms.CheckboxInput(attrs={
+    #         'class': 'form-check-input',
+    #         'id': 'multi_perosn'
+    #     }),
+    #     required=False,
+    #     label="Limit number of attendees?",
+    # )
     max_attendees = forms.IntegerField(
         widget=forms.NumberInput(attrs={
             'class': 'form-control',
             'placeholder': 'Enter maximum number of attendees'
         }),
-        label='Max attendees (leave blank if above is unchecked)',
+        label='Max attendees (if space is limited)',
         required=False
     )
 

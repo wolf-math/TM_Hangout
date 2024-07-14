@@ -74,11 +74,11 @@ WSGI_APPLICATION = 'tm_hangout.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": os.getenv('SB_DB'),
-        "USER": os.getenv('SB_USER'),
-        "PASSWORD": os.getenv('SB_PASS'),
-        "HOST": os.getenv('SB_HOST'), 
-        "PORT": os.getenv('SB_PORT'),
+        "NAME": os.getenv('PG_DB'),
+        "USER": os.getenv('PG_USER'),
+        "PASSWORD": os.getenv('PG_PASS'),
+        "HOST": os.getenv('PG_HOST'), 
+        "PORT": os.getenv('PG_PORT'),
     }
 }
 
@@ -121,7 +121,7 @@ STATICFILESTORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'job/static')]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'planner/static')]
 
 
 # Default primary key field type
