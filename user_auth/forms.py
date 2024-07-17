@@ -65,8 +65,7 @@ class SignUpForm(UserCreationForm):
             counter += 1
 
         user.username = username
-        print("USER", user)
-        print("BIRTHDAY", birthday)
-        user.save()
-        # Profile.objects.create(user=user, birthday=birthday)
+        if commit:
+            user.save()
+            Profile.objects.create(user=user, birthday=birthday)
         return user

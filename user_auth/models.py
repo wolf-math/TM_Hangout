@@ -9,14 +9,20 @@ class Profile(models.Model):
     birthday = models.DateField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     bio = models.TextField(blank=True, null=True)
+    image = models.CharField(blank=True, null=True, max_length=100)
+
+    def __str__(self):
+        return self.user.username
+
+    class Meta:
+        db_table = 'user_auth_profile'
 
 
+@receiver(post_save, sender=User)
+def create_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
 
-# @receiver(post_save, sender=User)
-# def create_profile(sender, instance, created, **kwargs):
-#     if created:
-#         Profile.objects.create(user=instance)
-
-# @receiver(post_save, sender=User)
-# def save_profile(sender, instance, **kwargs):
-#     instance.profile.save()
+@receiver(post_save, sender=User)
+def save_profile(sender, instance, **kwargs):
+    instance.profile.save()

@@ -70,18 +70,28 @@ WSGI_APPLICATION = 'tm_hangout.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": os.getenv('PG_DB'),
-        "USER": os.getenv('PG_USER'),
-        "PASSWORD": os.getenv('PG_PASS'),
-        "HOST": os.getenv('PG_HOST'), 
-        "PORT": os.getenv('PG_PORT'),
+if DEBUG == True:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql_psycopg2",
+            "NAME": os.getenv('PG_DB'),
+            "USER": os.getenv('PG_USER'),
+            "PASSWORD": os.getenv('PG_PASS'),
+            "HOST": os.getenv('PG_HOST'), 
+            "PORT": os.getenv('PG_PORT'),
+        }
     }
-}
-
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql_psycopg2",
+            "NAME": os.getenv('SB_DB'),
+            "USER": os.getenv('SB_USER'),
+            "PASSWORD": os.getenv('SB_PASS'),
+            "HOST": os.getenv('SB_HOST'), 
+            "PORT": os.getenv('SB_PORT'),
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
